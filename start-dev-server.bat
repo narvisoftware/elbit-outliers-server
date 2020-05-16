@@ -1,0 +1,1 @@
+mvnw --settings dev-settings.xml spring-boot:run -Dspring-boot.run.profiles=dev
