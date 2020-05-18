@@ -11,13 +11,9 @@
 	<body>
 
 		<div class="container">
-			<h2>Data loaded</h2>
+			<h2 th:text="'Last' + ${maxResults} + ' readings of ' + ${publisherName}"></h2>
 			<hr/>
-			<div class="row">
-				<div class="col-sm-12">
-					Inserted <span th:text="${messages.publishCount}">0</span> messages.
-				</div>
-			</div>
+			
 			<hr/>
 			<div class="row">
 				<div class="col-sm-4">
@@ -25,10 +21,10 @@
 				</div>
 			</div>
 			<hr/>
-			<div th:each="message, mStat : ${messages.readsInfo}" class="row">
+			<div th:each="read, mStat : ${readings}" class="row">
 				<div class="row">
 					<div class="col-sm-12">
-						<span th:text="${mStat.index + 1} + ' : ' + ${message}">0</span>.
+						<span th:text="${mStat.index + 1} + ' : ' + ${read.publisher} + ', ' + ${read.time} + ', ' + ${read.medianReading}">0</span>.
 					</div>
 				</div>
 			</div>

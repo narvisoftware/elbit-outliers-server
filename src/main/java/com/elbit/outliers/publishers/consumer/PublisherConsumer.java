@@ -23,10 +23,10 @@ public class PublisherConsumer {
 	private ReadingsService readingsService;
 
 	@KafkaListener(topics = "${publishers.topic.name}", containerFactory = "publisherReadingsKafkaListenerContainerFactory")
-	public void greetingListener(PublisherReading publisherReading) {
+	public void publisherListener(PublisherReading publisherReading) {
 		SensorData data = new SensorData(publisherReading.getPublisher(), publisherReading.getTime());
 		data.setMedian(publisherReading.getReadings());
-		readingsService.saveReading(data);
 		LOG.debug("Recieved reading: " + publisherReading + ", median: " + data.getMedianReading());
+		readingsService.saveReading(data);
 	}
 }

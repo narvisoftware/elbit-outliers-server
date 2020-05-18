@@ -1,9 +1,7 @@
 package com.elbit.outliers.domain;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 
 /**
@@ -11,9 +9,11 @@ import org.apache.commons.math3.stat.descriptive.rank.Median;
  * @author Mihai
  */
 public class SensorData {
-
+	
 	private String publisher;
+	
 	private LocalDateTime time;
+	
 	private Double medianReading;
 
 	public SensorData() {

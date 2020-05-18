@@ -22,7 +22,7 @@ public class DummyDataService {
 	PublisherProducerRepository publisherProducerRepository;
 
 	public static final int READINGS_PER_SENSOR_COUNT = 8;
-	public static final int SENSORS_READINGS_TO_GENERATE = 20;
+	public static final int SENSORS_READINGS_TO_GENERATE = 50;
 	public static final int SENSORS_COUNT = 5;
 
 	public DummyLoadResult loadData() {
@@ -34,10 +34,10 @@ public class DummyDataService {
 				
 				readings[a] = rnd.nextInt(2000);
 			}
-			String read = "dummy-publisher " + rnd.nextInt(SENSORS_COUNT) + ", values: " + Arrays.toString(readings);
+			String read = "dummy-publisher-" + rnd.nextInt(SENSORS_COUNT) + ", values: " + Arrays.toString(readings);
 			totalReads.add(read);
-			publisherProducerRepository.publish("dummy-publisher " + rnd.nextInt(SENSORS_COUNT), LocalDateTime.now(), readings);
+			publisherProducerRepository.publish("dummy-publisher-" + rnd.nextInt(SENSORS_COUNT), LocalDateTime.now(), readings);
 		}
-		return new DummyLoadResult(SENSORS_COUNT, totalReads);
+		return new DummyLoadResult(SENSORS_READINGS_TO_GENERATE, totalReads);
 	}
 }
