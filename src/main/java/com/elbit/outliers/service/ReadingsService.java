@@ -1,6 +1,7 @@
 package com.elbit.outliers.service;
 
 import com.elbit.outliers.domain.SensorData;
+import com.elbit.outliers.domain.SensorsCollection;
 import com.elbit.outliers.persistence.SensorsRepository;
 import java.util.List;
 import org.elasticsearch.action.search.SearchResponse;
@@ -17,17 +18,16 @@ public class ReadingsService {
 	@Autowired
 	SensorsRepository repository;
 	
-	private static final int DEFAULT_MAX_RESULTS = 10;
-	
 	public void saveReading(SensorData sensorData) {
 		repository.saveSensorRead(sensorData);
 	}
 	
-	public List<SensorData> getReadings(String publisherName, Integer maxResults) {
-		if(maxResults == null) {
-			maxResults = DEFAULT_MAX_RESULTS;
-		}
+	public SensorsCollection getReadings(String publisherName, Integer maxResults) {
 		return repository.getReadings(publisherName, maxResults);
+	}
+	
+	public SensorData getLastReading() {
+		return repository.getLastReading();
 	}
 	
 }

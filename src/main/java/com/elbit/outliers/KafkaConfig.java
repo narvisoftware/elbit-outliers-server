@@ -1,6 +1,6 @@
 package com.elbit.outliers;
 
-import com.elbit.outliers.publishers.PublisherReading;
+import com.elbit.outliers.integration.PublisherReading;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

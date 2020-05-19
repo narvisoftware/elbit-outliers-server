@@ -1,4 +1,4 @@
-package com.elbit.outliers.publishers;
+package com.elbit.outliers.integration;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

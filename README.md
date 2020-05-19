@@ -17,3 +17,11 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
+### Terms
+* Q1 – quartile 1, the median of the lower half of the data set
+* Q3 – quartile 3, the median of the upper half of the data set
+* IQR – interquartile range, the difference from Q3 to Q1 (IQR = Q3 – Q1)
+
+### Outliers
+* larger than Q3 by at least 1.5 times the interquartile range (IQR), or
+* smaller than Q1 by at least 1.5 times the IQR.

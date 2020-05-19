@@ -1,7 +1,7 @@
-package com.elbit.outliers.publishers.consumer;
+package com.elbit.outliers.integration;
 
 import com.elbit.outliers.domain.SensorData;
-import com.elbit.outliers.publishers.PublisherReading;
+import com.elbit.outliers.integration.PublisherReading;
 import com.elbit.outliers.service.ReadingsService;
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;

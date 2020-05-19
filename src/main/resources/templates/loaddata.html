@@ -25,13 +25,32 @@
 				</div>
 			</div>
 			<hr/>
-			<div th:each="message, mStat : ${messages.readsInfo}" class="row">
-				<div class="row">
-					<div class="col-sm-12">
-						<span th:text="${mStat.index + 1} + ' : ' + ${message}">0</span>.
-					</div>
-				</div>
-			</div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Publisher Name</th>
+						<th scope="col">Readings</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="read, mStat : ${messages.readsInfo}">
+						<th scope="row">
+							<span th:text="${mStat.index + 1}">0</span>
+						</th>
+						<td>
+							<span 
+							th:text="${read.key}">0</span>
+						</td>
+						<td>
+							<span 
+							th:text="${read.value}">0</span>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
 		</div>
 	</body>
 </html>

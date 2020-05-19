@@ -1,6 +1,6 @@
-package com.elbit.outliers.publishers.producer;
+package com.elbit.outliers.dummydata;
 
-import com.elbit.outliers.publishers.PublisherReading;
+import com.elbit.outliers.integration.PublisherReading;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;

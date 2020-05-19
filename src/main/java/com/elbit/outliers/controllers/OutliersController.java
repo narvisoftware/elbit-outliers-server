@@ -1,8 +1,9 @@
 package com.elbit.outliers.controllers;
 
 import com.elbit.outliers.domain.SensorData;
-import com.elbit.outliers.service.DummyDataService;
-import com.elbit.outliers.service.DummyLoadResult;
+import com.elbit.outliers.domain.SensorsCollection;
+import com.elbit.outliers.dummydata.DummyDataService;
+import com.elbit.outliers.dummydata.DummyLoadResult;
 import com.elbit.outliers.service.ReadingsService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,21 @@ public class OutliersController {
 	@Autowired
 	private ReadingsService readingsService;
 	
+	private static final int DEFAULT_MAX_RESULTS = 10;
+	
     @GetMapping("/outliers")
     public String outliers(Model model, @RequestParam(required = false) String publisherName, @RequestParam(required = false) Integer maxResults) {
 		if(publisherName == null) {
-			publisherName = "dummy-publisher-0";
+			SensorData lastRead = readingsService.getLastReading();
+			publisherName = lastRead.getPublisher();
 		}
-		List<SensorData> readings = readingsService.getReadings(publisherName, maxResults);
+		if(maxResults == null) {
+			maxResults = DEFAULT_MAX_RESULTS;
+		}
+		SensorsCollection readings = readingsService.getReadings(publisherName, maxResults);
         model.addAttribute("readings", readings);
+		model.addAttribute("publisherName", publisherName);
+		model.addAttribute("maxResults", maxResults);
         return "outliers";
     }
 }

@@ -6,14 +6,40 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<style>
+			.outlier {
+				background-color: #CFF5FF !important;
+				font-weight: bold;
+				color: red;
+			}
+		</style>
 	</head>
 
 	<body>
 
 		<div class="container">
-			<h2 th:text="'Last' + ${maxResults} + ' readings of ' + ${publisherName}"></h2>
+			<h2 th:text="'Last ' + ${maxResults} + ' readings of ' + ${publisherName}"></h2>
 			<hr/>
-			
+			<form th:action="@{/outliers}"  method="get">
+				<div class="form-group">
+					<label for="publisherName">Publisher Name:</label>
+					<input 
+						type="text" 
+						th:value="${publisherName}" 
+						name="publisherName"
+						id = "publisherName"
+						class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label for="maxResults">Number of readings:</label>
+					<input type="number" 
+						   th:value="${maxResults}" 
+						   name="maxResults"
+						   id = "maxResults"
+						   class="form-control"/>
+				</div>
+				<input type="submit" class="btn btn-danger btn-lg" value="Search..."/>
+			</form>
 			<hr/>
 			<div class="row">
 				<div class="col-sm-4">
@@ -21,13 +47,38 @@
 				</div>
 			</div>
 			<hr/>
-			<div th:each="read, mStat : ${readings}" class="row">
-				<div class="row">
-					<div class="col-sm-12">
-						<span th:text="${mStat.index + 1} + ' : ' + ${read.publisher} + ', ' + ${read.time} + ', ' + ${read.medianReading}">0</span>.
-					</div>
-				</div>
-			</div>
+			
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Publisher Name</th>
+						<th scope="col">Read Timestamp</th>
+						<th scope="col">Median Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="read, mStat : ${readings.sensorDatas}"
+						th:classappend="${read.outlier} ? outlier : normal">
+						<th scope="row">
+							<span th:text="${mStat.index + 1}">0</span>
+						</th>
+						<td>
+							<span 
+							th:text="${read.publisher}">0</span>
+						</td>
+						<td>
+							<span 
+							th:text="${#temporals.format(read.time, 'dd/MM/yyyy HH:mm:ss')}">0</span>
+						</td>
+						<td>
+							<span 
+							th:text="${read.medianReading}">0</span>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
 		</div>
 	</body>
 </html>
