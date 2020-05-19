@@ -55,7 +55,6 @@ public class ElasticConfig {
 	private Map getMapping() throws Exception {
 		Map<String, Object> textType = new HashMap<>();
 		textType.put("type", "keyword");
-//		textType.put("index", "not_analyzed");
 
 		Map<String, Object> timeType = new HashMap<>();
 		timeType.put("type", "date_nanos");
@@ -64,6 +63,7 @@ public class ElasticConfig {
 		doubleType.put("type", "double");
 
 		Map<String, Object> properties = new HashMap<>();
+		properties.put("id", textType);
 		properties.put("publisher", textType);
 		properties.put("time", timeType);
 		properties.put("medianReading", doubleType);

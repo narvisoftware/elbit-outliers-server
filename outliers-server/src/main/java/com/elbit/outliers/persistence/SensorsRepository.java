@@ -16,6 +16,7 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
@@ -51,10 +52,21 @@ public class SensorsRepository {
 	private static final String INDEX = "sensor-index";
 
 	public void saveSensorRead(SensorData data) {
+		saveSensorRead(data, false);
+	}
+	
+	public void saveSensorReadSyncronously(SensorData data) {
+		saveSensorRead(data, true);
+	}
+	
+	private void saveSensorRead(SensorData data, boolean sync) {
 		Map dataMap = objectMapper.convertValue(data, Map.class);
 		IndexRequest indexRequest = new IndexRequest(INDEX)
-				.id(UUID.randomUUID().toString())
+				.id(data.getId())
 				.source(dataMap);
+		if(sync) {
+			indexRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL); 
+		}
 		try {
 			IndexResponse response = client.index(indexRequest, RequestOptions.DEFAULT);
 		} catch (Exception e) {
@@ -62,10 +74,8 @@ public class SensorsRepository {
 		}
 	}
 
-	public SensorsCollection getReadings(String publisherName, int maxResults) {
-
-		SensorsCollection sensors = getSensorsCollection(publisherName);
-
+	public List<SensorData> getReadings(String publisherName, int maxResults) {
+		List<SensorData> data = new ArrayList<>();
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		sourceBuilder.query(QueryBuilders.termQuery("publisher", publisherName));
 		sourceBuilder.from(0);
@@ -81,22 +91,22 @@ public class SensorsRepository {
 			searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 			List<SearchHit> searchHits = Arrays.asList(searchResponse.getHits().getHits());
 			for (SearchHit hit : searchHits) {
-				sensors.add(objectMapper.readValue(hit.getSourceAsString(), SensorData.class));
+				data.add(objectMapper.readValue(hit.getSourceAsString(), SensorData.class));
 			}
-			return sensors;
+			return data;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private SensorsCollection getSensorsCollection(String publisherName) {
+	public Double[] getPercentiles(String publisherName, double lowPercentile, double highPercentile) {
 		SearchSourceBuilder search = new SearchSourceBuilder();
 		search.query(QueryBuilders.termQuery("publisher", publisherName));
 		PercentilesAggregationBuilder aggregation
 				= AggregationBuilders
 						.percentiles("agg")
 						.field("medianReading")
-						.percentiles(25.0, 75.0);
+						.percentiles(lowPercentile, highPercentile);
 		search.aggregation(aggregation);
 		SearchRequest request = new SearchRequest();
 		request.source(search);
@@ -106,23 +116,23 @@ public class SensorsRepository {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		double q1 = 0;
-		double q3 = 0;
+
 		Percentiles agg = response.getAggregations().get("agg");
+		double lowVal = 0;
+		double highVal = 0;
 		for (Percentile entry : agg) {
 			double percent = entry.getPercent();
 			double value = entry.getValue();
 			LOG.info("percent [{}], value [{}]", percent, value);
-			if (percent == 25.0) {
-				q1 = value;
+
+			if (percent == lowPercentile) {
+				lowVal = value;
 			}
-			if (percent == 75.0) {
-				q3 = value;
+			if (percent == highPercentile) {
+				highVal = value;
 			}
 		}
-
-		return new SensorsCollection(q1, q3);
-
+		return new Double[]{lowVal, highVal};
 	}
 
 	public SensorData getLastReading() {

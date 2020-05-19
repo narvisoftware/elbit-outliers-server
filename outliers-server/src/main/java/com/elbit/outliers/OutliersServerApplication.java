@@ -68,17 +68,7 @@ public class OutliersServerApplication {
 	@PostConstruct
 	private void startElasticsearchLocalServer() throws Exception {
 		if (isDevEnv()) {
-//			runner = new ElasticsearchClusterRunner();
-//			runner.onBuild((int number, Settings.Builder settingsBuilder) -> {
-//				settingsBuilder.put("http.cors.enabled", true);
-//				settingsBuilder.put("http.cors.allow-origin", "*");
-//				settingsBuilder.putList("discovery.seed_hosts", "127.0.0.1:" + elasticsearchBootstrapPort, "127.0.0.1:9302");
-//				settingsBuilder.putList("cluster.initial_master_nodes", "127.0.0.1:" + elasticsearchBootstrapPort);
-//			}).build(newConfigs().clusterName(ELASTIC_CLUSTER_NAME).numOfNode(ELASTIC_NUM_OF_NODES));
-//			runner.ensureGreen();
-
 			runner = new ElasticsearchClusterRunner();
-			// create ES nodes
 			runner.onBuild(new ElasticsearchClusterRunner.Builder() {
 				@Override
 				public void build(final int number, final Settings.Builder settingsBuilder) {

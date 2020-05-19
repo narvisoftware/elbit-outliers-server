@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -25,9 +27,22 @@ public class SensorsCollection {
 		this.lowerLimit = q1 - 1.5 * (q3 - q1);
 		this.upperLimit = q3 + 1.5 * (q3 - q1);
 	}
+
+	public void add(List<SensorData> data) {
+		readings.addAll(data.stream().map(d -> new Outlier(d)).collect(Collectors.toList()));
+	}
 	
 	public void add(SensorData data) {
 		readings.add(new Outlier(data));
+	}
+	
+	public Outlier getById(String id) {
+		for(Outlier read : readings) {
+			if(read.getId().equals(id)) {
+				return read;
+			}
+		}
+		throw new NoSuchElementException("Cannot find element " + id);
 	}
 
 	public List<Outlier> getSensorDatas() {
@@ -40,6 +55,10 @@ public class SensorsCollection {
 
 		public Outlier(SensorData sensorData) {
 			this.sensorData = sensorData;
+		}
+		
+		public String getId() {
+			return sensorData.getId();
 		}
 		
 		public String getPublisher() {

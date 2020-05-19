@@ -2,6 +2,7 @@ package com.elbit.outliers.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 
 /**
@@ -9,6 +10,8 @@ import org.apache.commons.math3.stat.descriptive.rank.Median;
  * @author Mihai
  */
 public class SensorData {
+	
+	private String id = UUID.randomUUID().toString();
 	
 	private String publisher;
 	
@@ -23,7 +26,21 @@ public class SensorData {
 		this.publisher = publisher;
 		this.time = time;
 	}
+	
+	public SensorData(String publisher, LocalDateTime time, Double median) {
+		this.publisher = publisher;
+		this.time = time;
+		this.medianReading = median;
+	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public void setMedian(List<Integer> values) {
 		double[] doubleValues = values.stream().mapToDouble(num -> (double)num).toArray();
 		medianReading = new Median().evaluate(doubleValues);
