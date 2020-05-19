@@ -1,27 +1,18 @@
-# Getting Started
+# Outliers detection
 
-### Reference Documentation
-For further reference, please consider the following sections:
+Because percentile computation for unbounded values of data cannot be scaled, I've used the approximate calculation of percentile of the Elasticsearch's aggregate percentile function.
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.3.0.RC1/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.3.0.RC1/maven-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.2.7.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Data Elasticsearch (Access+Driver)](https://docs.spring.io/spring-boot/docs/2.2.7.RELEASE/reference/htmlsingle/#boot-features-elasticsearch)
-* [Spring for Apache Kafka](https://docs.spring.io/spring-boot/docs/2.2.7.RELEASE/reference/htmlsingle/#boot-features-kafka)
+If the values of the sensor readings are in an reasonable number of values (for example only integers in range - 0 to 100), then the percentile can be computed incrementaly by storing a map with the number of readings for each sensor value (this will add .5 non integer values computed as a result of median comprimation of received redings).
 
-### Guides
-The following guides illustrate how to use some features concretely:
+### Outlier formula
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
+For outlier detection, I've used the following formula: 
 
-### Terms
 * Q1 – quartile 1, the median of the lower half of the data set
 * Q3 – quartile 3, the median of the upper half of the data set
 * IQR – interquartile range, the difference from Q3 to Q1 (IQR = Q3 – Q1)
 
-### Outliers
+Where  the outliers are the values:
+
 * larger than Q3 by at least 1.5 times the interquartile range (IQR), or
 * smaller than Q1 by at least 1.5 times the IQR.
