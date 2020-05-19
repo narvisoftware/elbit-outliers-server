@@ -16,3 +16,11 @@ Where  the outliers are the values:
 
 * larger than Q3 by at least 1.5 times the interquartile range (IQR), or
 * smaller than Q1 by at least 1.5 times the IQR.
+
+## Running the server
+
+For dev environment, the application starts the Elasticsearch and Kafka servers embedded inside the application.
+
+The application can be run with the start-dev-server.bat batch file. For non windows machines, the content of the .bat file can be executed in the root folder of the application:
+
+```mvnw --settings dev-settings.xml -pl outliers-server -am spring-boot:run -Dspring-boot.run.profiles=dev```
