@@ -1,12 +1,7 @@
 package com.elbit.outliers.dummydata;
 
-import com.elbit.outliers.integration.PublisherReading;
-import com.elbit.outliers.domain.SensorData;
-import com.elbit.outliers.dummydata.PublisherProducerRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

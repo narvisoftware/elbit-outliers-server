@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>Load data result</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="container">
+			<h2>Data loaded</h2>
+			<hr/>
+			<div class="row">
+				<div class="col-sm-12">
+					Inserted <span th:text="${messages.publishCount}">0</span> messages.
+				</div>
+			</div>
+			<hr/>
+			<div class="row">
+				<div class="col-sm-4">
+					<a href="/index.html" class="btn btn-primary btn-lg" role="button" aria-pressed="true">Back</a>
+				</div>
+			</div>
+			<hr/>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Publisher Name</th>
+						<th scope="col">Readings</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="read, mStat : ${messages.readsInfo}">
+						<th scope="row">
+							<span th:text="${mStat.index + 1}">0</span>
+						</th>
+						<td>
+							<span 
+							th:text="${read.key}">0</span>
+						</td>
+						<td>
+							<span 
+							th:text="${read.value}">0</span>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+		</div>
+	</body>
+</html>

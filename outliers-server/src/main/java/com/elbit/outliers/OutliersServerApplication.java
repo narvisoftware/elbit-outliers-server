@@ -93,7 +93,7 @@ public class OutliersServerApplication {
 
 	private boolean isDevEnv() {
 		LOG.error("ACTIVE SPRING PROFILE: " + Arrays.toString(env.getActiveProfiles()));
-		return (env.acceptsProfiles(Profiles.of("default", "dev")));
+		return (env.acceptsProfiles(Profiles.of("default", "dev", "test")));
 	}
 
 	@Bean

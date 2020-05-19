@@ -1,1 +1,1 @@
-mvnw --settings dev-settings.xml spring-boot:run -Dspring-boot.run.profiles=dev
+mvnw --settings dev-settings.xml -pl outliers-server -am spring-boot:run -Dspring-boot.run.profiles=dev
